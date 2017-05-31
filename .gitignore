@@ -1,0 +1,15 @@
+typings
+src/main.js
+src/*.map
+src/app/*.map
+src/app/*.js
+src/app/**/*.js
+src/app/**/**/*.js
+src/app/**/**/*.map
+node_modules
+jspm_packages
+bower_components
+.vscode
+.editorconfig
+npm-debug.log*
+tslint.json
