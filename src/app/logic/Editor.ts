@@ -35,6 +35,7 @@ export class Editor {
     -Add favicon on canvas at start. Alternatively draw from shapes.
     -Add Circle
     -Add Ellipse
+    -Add Polygon
     -Add Triangle
     -Add Pencil
     -Add Tool class

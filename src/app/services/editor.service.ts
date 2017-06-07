@@ -1,12 +1,4 @@
 import { CustomEventEmitter } from './../logic/CustomEventEmitter';
-import { Stroke } from './../models/Stroke';
-import { TextOptions } from './../models/TextOptions';
-import { Text } from './../models/Text';
-import { Fonts } from './../enums/Fonts';
-import { Dimensions } from './../models/Dimensions';
-import { Coordinate } from './../models/Coordinate';
-import { ElementOptions } from './../models/ElementOptions';
-import { Rectangle } from './../models/Rectangle';
 import { Editor } from './../logic/Editor';
 import { Injectable } from '@angular/core';
 import { Element } from './../models/Element';

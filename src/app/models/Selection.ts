@@ -1,35 +1,39 @@
+import { ElementOptions } from './ElementOptions';
+import { Circle } from './Circle';
+import { Strokeable } from './../interfaces/Strokeable';
 import { Dimensions } from './Dimensions';
-import { Rectangle } from './Rectangle';
 import { Coordinate } from './Coordinate';
 import { Drawable } from './../interfaces/Drawable';
 import { Stroke } from './Stroke';
-import { ElementOptions } from './ElementOptions';
-import { Shape } from './Shape';
 import { Anchor } from './Anchor';
 import { Element } from './Element';
 import { Anchors } from './../enums/Anchors';
 
-export class Selection implements Drawable {
+export class Selection implements Drawable, Strokeable {
     element: Element;
+    pos: Coordinate;
+    dims: Dimensions;
     anchors: Anchor[];
-    area: Shape;
-    lineDash: number;
+    stroke: Stroke;
 
     constructor(element: Element) {
         this.element = element;
-        this.lineDash = 5;
-
+        this.stroke = new Stroke('grey', 1);
         this.update();
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        this.drawStroke(ctx);
+    }
+
+    drawStroke(ctx: CanvasRenderingContext2D) {
         ctx.save();
 
         ctx.strokeStyle = 'lightgray';
-        ctx.lineWidth = this.area.stroke.lineWidth;
+        ctx.lineWidth = this.stroke.lineWidth;
 
-        ctx.setLineDash([this.lineDash]);
-        ctx.strokeRect(this.area.pos.x, this.area.pos.y, this.area.dims.w, this.area.dims.h);
+        ctx.setLineDash([5]);
+        ctx.strokeRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h);
 
         ctx.restore();
         ctx.save();
@@ -41,6 +45,15 @@ export class Selection implements Drawable {
             anchor.draw(ctx);
         }
 
+        const center = new Coordinate(this.pos.x + this.dims.w / 2, this.pos.y + this.dims.h / 2);
+
+        ctx.beginPath();
+        ctx.moveTo(center.x - 5, center.y);
+        ctx.lineTo(center.x + 5, center.y);
+        ctx.moveTo(center.x, center.y - 5);
+        ctx.lineTo(center.x, center.y + 5);
+        ctx.stroke();
+        ctx.closePath();
         ctx.restore();
     }
 
@@ -53,13 +66,8 @@ export class Selection implements Drawable {
         const cw = Anchor.width;
         const cy = Anchor.height;
 
-        const ax = ex - 5 - cw;
-        const ay = ey - 5 - cy;
-        const aw = ew + 10 + cw * 2;
-        const ah = eh + 10 + cy * 2;
-
-        this.area = new Rectangle(
-            new ElementOptions(new Coordinate(ax, ay), new Dimensions(aw, ah), '', new Stroke('gray', 1)));
+        this.pos = new Coordinate(ex - 5 - cw, ey - 5 - cy);
+        this.dims = new Dimensions(ew + 10 + cw * 2, eh + 10 + cy * 2);
 
         this.anchors = [
             new Anchor(Anchors.Top, new Coordinate(ex + ew * 0.5 - cw * 0.5, ey - cy * 1.5 - 5)),

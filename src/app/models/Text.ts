@@ -1,22 +1,26 @@
-import { Dimensions } from './Dimensions';
+import { Stroke } from './Stroke';
+import { Strokeable } from './../interfaces/Strokeable';
 import { ResizeOptions } from './ResizeOptions';
 import { TextOptions } from './TextOptions';
 import { ElementOptions } from './ElementOptions';
 import { Element } from './Element';
 import { Fonts } from './../enums/Fonts';
 
-export class Text extends Element {
+export class Text extends Element implements Strokeable {
 
-    private content: string;
-    private size: number;
-    private font: Fonts;
-    private bold: boolean;
-    private italic: boolean;
-    private underline: boolean;
+    content: string;
+    size: number;
+    font: Fonts;
+    bold: boolean;
+    italic: boolean;
+    underline: boolean;
+    stroke: Stroke;
 
     constructor(content: string, textOptions: TextOptions, elementOptions: ElementOptions) {
         elementOptions.dims.h = textOptions.size;
+
         super(elementOptions);
+
         this.content = content;
         this.size = textOptions.size;
         this.font = textOptions.font;

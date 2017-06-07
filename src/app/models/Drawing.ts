@@ -14,7 +14,6 @@ export class Drawing implements Drawable {
     draw(ctx: CanvasRenderingContext2D) {
         for (let element of this.elements) {
             element.draw(ctx);
-            element.updateThumbnail(ctx);
         }
     }
 }

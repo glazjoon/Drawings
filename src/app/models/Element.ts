@@ -3,7 +3,6 @@ import { Dimensions } from './Dimensions';
 import { ResizeOptions } from './ResizeOptions';
 import { Drawable } from './../interfaces/Drawable';
 import { Coordinate } from './../models/Coordinate';
-import { Stroke } from './Stroke';
 import { ElementOptions } from './ElementOptions';
 
 export abstract class Element implements Drawable {
@@ -11,7 +10,6 @@ export abstract class Element implements Drawable {
     pos: Coordinate;
     dims: Dimensions;
     fillColor: string;
-    stroke: Stroke;
     thumbnail: string;
 
     constructor(options: ElementOptions) {
@@ -19,7 +17,6 @@ export abstract class Element implements Drawable {
         this.pos = options.pos;
         this.dims = options.dims;
         this.fillColor = options.fillColor;
-        this.stroke = options.stroke;
     }
 
     abstract draw(ctx: CanvasRenderingContext2D): void;
@@ -40,7 +37,7 @@ export abstract class Element implements Drawable {
         return withinRangeX && withinRangeY;
     }
 
-    updateThumbnail(ctx: CanvasRenderingContext2D) {
+    /*updateThumbnail(ctx: CanvasRenderingContext2D) {
         let ghostCanvas = document.createElement('canvas');
         let ghostCtx = ghostCanvas.getContext('2d');
 
@@ -50,5 +47,6 @@ export abstract class Element implements Drawable {
         this.draw(ghostCtx);
         this.thumbnail = ghostCanvas.toDataURL();
     }
+    */
 }
 

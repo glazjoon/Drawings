@@ -16,18 +16,14 @@ export class Rectangle extends Shape {
         if (this.stroke) {
             this.drawStroke(ctx);
         } else {
-            this.drawFill(ctx);
+            ctx.fillStyle = this.fillColor;
+        ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h);
         }
 
         ctx.restore();
     }
 
-    private drawFill(ctx: CanvasRenderingContext2D) {
-        ctx.fillStyle = this.fillColor;
-        ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h);
-    }
-
-    private drawStroke(ctx: CanvasRenderingContext2D) {
+    drawStroke(ctx: CanvasRenderingContext2D) {
         ctx.strokeStyle = this.stroke.color;
         ctx.lineWidth = this.stroke.lineWidth;
         ctx.strokeRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h);
@@ -95,7 +91,6 @@ export class Rectangle extends Shape {
         const ratio = this.dims.w / this.dims.h;
 
         let sum;
-        console.log('Ratio: ' + ratio);
 
         switch (anchor) {
             case Anchors.Left:

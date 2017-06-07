@@ -28,16 +28,17 @@ export class EditorComponent implements OnInit {
     ngOnInit() {
         this.editorService.editor = new Editor(this.er.nativeElement.querySelector('#canvas'));
         this.editor = this.editorService.editor;
-        this.editor.addElement(new Circle(
+      /*  this.editor.addElement(new Circle(
             new ElementOptions(
                 new Coordinate(this.canvasWidth / 2, this.canvasHeight / 2),
                 new Dimensions(50, 0), '#000000', null)));
+                */
 
         this.editor.addElement(new Rectangle(
             new ElementOptions(
                 new Coordinate(this.canvasWidth / 2 - 25, this.canvasHeight / 2 - 25),
                 new Dimensions(50, 50), '#ff0000', null)));
-
+/*
         this.editor.addElement(new Text(
             'Drawings',
             new TextOptions(72, Fonts.Arial, false, false, false),
@@ -45,5 +46,6 @@ export class EditorComponent implements OnInit {
                 new Coordinate(this.canvasWidth / 2, this.canvasHeight / 2),
                 new Dimensions(0, 0), '#0000ff',
                 new Stroke('#000000', 2))));
+                */
     }
 }
