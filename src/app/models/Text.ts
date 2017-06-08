@@ -1,3 +1,4 @@
+import { Coordinate } from './Coordinate';
 import { Stroke } from './Stroke';
 import { Strokeable } from './../interfaces/Strokeable';
 import { ResizeOptions } from './ResizeOptions';
@@ -62,5 +63,15 @@ export class Text extends Element implements Strokeable {
         const increment = diffX > diffY ? diffX : diffY;
         this.size += increment;
         this.dims.h = this.size;
+    }
+
+    isHovered(coords: Coordinate): boolean {
+        const mouseX = coords.x;
+        const mouseY = coords.y;
+
+        const withinRangeX = mouseX > this.pos.x && mouseX < this.pos.x + this.dims.w;
+        const withinRangeY = mouseY > this.pos.y && mouseY < this.pos.y + this.dims.h;
+
+        return withinRangeX && withinRangeY;
     }
 }

@@ -17,9 +17,4 @@ export class EditorService {
     constructor() {
         this.ElementSelectedEvent = new CustomEventEmitter();
     }
-
-    setSelected(id: string) {
-        const element = this.editor.setSelectedById(id);
-        this.ElementSelectedEvent.emit(element);
-    }
 }

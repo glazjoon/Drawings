@@ -21,32 +21,11 @@ export abstract class Element implements Drawable {
 
     abstract draw(ctx: CanvasRenderingContext2D): void;
     abstract resize(options: ResizeOptions): void;
+    abstract isHovered(coords: Coordinate): boolean;
 
     move(mousePosition: Coordinate, mouseDragStart: Coordinate) {
         this.pos.x += mousePosition.x - mouseDragStart.x;
         this.pos.y += mousePosition.y - mouseDragStart.y;
     }
-
-    isHovered(coords: Coordinate) {
-        const mouseX = coords.x;
-        const mouseY = coords.y;
-
-        const withinRangeX = mouseX > this.pos.x && mouseX < this.pos.x + this.dims.w;
-        const withinRangeY = mouseY > this.pos.y && mouseY < this.pos.y + this.dims.h;
-
-        return withinRangeX && withinRangeY;
-    }
-
-    /*updateThumbnail(ctx: CanvasRenderingContext2D) {
-        let ghostCanvas = document.createElement('canvas');
-        let ghostCtx = ghostCanvas.getContext('2d');
-
-        ghostCanvas.width = ctx.canvas.width;
-        ghostCanvas.height = ctx.canvas.height;
-
-        this.draw(ghostCtx);
-        this.thumbnail = ghostCanvas.toDataURL();
-    }
-    */
 }
 

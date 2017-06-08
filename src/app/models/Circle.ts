@@ -1,3 +1,4 @@
+import { Coordinate } from './Coordinate';
 import { ResizeOptions } from './ResizeOptions';
 import { Shape } from './Shape';
 
@@ -21,5 +22,12 @@ export class Circle extends Shape {
 
     resize(options: ResizeOptions) {
 
+    }
+
+    isHovered(coords: Coordinate): boolean {
+        const distanceToCenter = Math.hypot(this.pos.x - coords.x, this.pos.y - coords.y);
+        const radius = this.dims.w;
+
+        return radius > distanceToCenter;
     }
 }

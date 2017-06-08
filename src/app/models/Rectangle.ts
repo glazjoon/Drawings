@@ -17,7 +17,7 @@ export class Rectangle extends Shape {
             this.drawStroke(ctx);
         } else {
             ctx.fillStyle = this.fillColor;
-        ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h);
+            ctx.fillRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h);
         }
 
         ctx.restore();
@@ -80,7 +80,7 @@ export class Rectangle extends Shape {
 
     private fixedResize(anchor: Anchors, mousePosition: Coordinate, mouseDragStart: Coordinate) {
         const oldX = this.pos.x;
-        const oldY = this.pos.y;
+        // const oldY = this.pos.y;
 
         const mouseX = mousePosition.x;
         const mouseY = mousePosition.y;
@@ -153,10 +153,20 @@ export class Rectangle extends Shape {
             this.dims.h = this.dims.h < 1 ? 1 : this.dims.h;
         } else {
             if (options.isFixed) {
-                this.fixedResize(options.anchor, options.mousePosition, options.mouseDragStart)
+                this.fixedResize(options.anchor, options.mousePosition, options.mouseDragStart);
             } else {
                 this.freeResize(options.anchor, options.mousePosition, options.mouseDragStart);
             }
         }
+    }
+
+    isHovered(coords: Coordinate): boolean {
+        const mouseX = coords.x;
+        const mouseY = coords.y;
+
+        const withinRangeX = mouseX > this.pos.x && mouseX < this.pos.x + this.dims.w;
+        const withinRangeY = mouseY > this.pos.y && mouseY < this.pos.y + this.dims.h;
+
+        return withinRangeX && withinRangeY;
     }
 }

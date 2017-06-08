@@ -1,41 +1,43 @@
+import { Stroke } from './Stroke';
 import { ElementOptions } from './ElementOptions';
-import { Circle } from './Circle';
-import { Strokeable } from './../interfaces/Strokeable';
+import { Rectangle } from './Rectangle';
 import { Dimensions } from './Dimensions';
 import { Coordinate } from './Coordinate';
 import { Drawable } from './../interfaces/Drawable';
-import { Stroke } from './Stroke';
 import { Anchor } from './Anchor';
-import { Element } from './Element';
 import { Anchors } from './../enums/Anchors';
+import { Element } from './../models/Element';
 
-export class Selection implements Drawable, Strokeable {
+export class Selection implements Drawable {
     element: Element;
-    pos: Coordinate;
-    dims: Dimensions;
     anchors: Anchor[];
-    stroke: Stroke;
+    selectionArea: Rectangle;
 
-    constructor(element: Element) {
-        this.element = element;
-        this.stroke = new Stroke('grey', 1);
+    constructor(selectedElement: Element) {
+        this.element = selectedElement;
         this.update();
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        this.drawStroke(ctx);
-    }
-
-    drawStroke(ctx: CanvasRenderingContext2D) {
         ctx.save();
 
         ctx.strokeStyle = 'lightgray';
-        ctx.lineWidth = this.stroke.lineWidth;
-
+        ctx.lineWidth = 1;
         ctx.setLineDash([5]);
-        ctx.strokeRect(this.pos.x, this.pos.y, this.dims.w, this.dims.h);
+        ctx.strokeRect(
+            this.selectionArea.pos.x,
+            this.selectionArea.pos.y,
+            this.selectionArea.dims.w,
+            this.selectionArea.dims.h
+        );
 
         ctx.restore();
+
+        this.drawAnchors(ctx);
+        this.drawCenterCross(ctx);
+    }
+
+    private drawAnchors(ctx: CanvasRenderingContext2D) {
         ctx.save();
 
         ctx.strokeStyle = Anchor.stroke.color;
@@ -45,9 +47,18 @@ export class Selection implements Drawable, Strokeable {
             anchor.draw(ctx);
         }
 
-        const center = new Coordinate(this.pos.x + this.dims.w / 2, this.pos.y + this.dims.h / 2);
+        ctx.restore();
+    }
 
+    private drawCenterCross(ctx: CanvasRenderingContext2D) {
+        const center = new Coordinate(
+            this.selectionArea.pos.x + this.selectionArea.dims.w / 2,
+            this.selectionArea.pos.y + this.selectionArea.dims.h / 2
+        );
+
+        ctx.save();
         ctx.beginPath();
+        ctx.strokeStyle = 'grey';
         ctx.moveTo(center.x - 5, center.y);
         ctx.lineTo(center.x + 5, center.y);
         ctx.moveTo(center.x, center.y - 5);
@@ -57,27 +68,43 @@ export class Selection implements Drawable, Strokeable {
         ctx.restore();
     }
 
-    update() {
-        const ex = this.element.pos.x;
-        const ey = this.element.pos.y;
-        const ew = this.element.dims.w;
-        const eh = this.element.dims.h;
+    private update() {
+        const elementType = this.element.constructor.name;
+        let sPos = new Coordinate(this.element.pos.x, this.element.pos.y);
+        let sDims = new Dimensions(this.element.dims.w, this.element.dims.h);
 
-        const cw = Anchor.width;
-        const cy = Anchor.height;
+        switch (elementType) {
+            case 'Circle':
+                sPos.x -= this.element.dims.w;
+                sPos.y -= this.element.dims.w;
+                sDims.w *= 2;
+                sDims.h *= 2;
+                break;
+        }
 
-        this.pos = new Coordinate(ex - 5 - cw, ey - 5 - cy);
-        this.dims = new Dimensions(ew + 10 + cw * 2, eh + 10 + cy * 2);
+        const padding = 7.5;
+        sPos.x -= padding;
+        sPos.y -= padding;
+        sDims.w += padding * 2;
+        sDims.h += padding * 2;
+
+        this.selectionArea = new Rectangle(new ElementOptions(sPos, sDims, null, new Stroke('grey', 1)));
+
+        this.updateAnchors(sPos, sDims);
+    }
+
+    private updateAnchors(sPos: Coordinate, sDims: Dimensions) {
+        const aSize = Anchor.width / 2;
 
         this.anchors = [
-            new Anchor(Anchors.Top, new Coordinate(ex + ew * 0.5 - cw * 0.5, ey - cy * 1.5 - 5)),
-            new Anchor(Anchors.Right, new Coordinate(ex + ew + cw * 0.5 + 5, ey + eh * 0.5 - cy * 0.5)),
-            new Anchor(Anchors.Bottom, new Coordinate(ex + ew * 0.5 - cw * 0.5, ey + eh + cy * 0.5 + 5)),
-            new Anchor(Anchors.Left, new Coordinate(ex - cw * 1.5 - 5, ey + eh * 0.5 - cy * 0.5)),
-            new Anchor(Anchors.TopLeft, new Coordinate(ex - cw * 1.5 - 5, ey - cy * 1.5 - 5)),
-            new Anchor(Anchors.TopRight, new Coordinate(ex + ew + cw * 0.5 + 5, ey - cw * 1.5 - 5)),
-            new Anchor(Anchors.BottomLeft, new Coordinate(ex - cw * 1.5 - 5, ey + eh + cw * 0.5 + 5)),
-            new Anchor(Anchors.BottomRight, new Coordinate(ex + ew + cw * 0.5 + 5, ey + eh + cw * 0.5 + 5))
+            new Anchor(Anchors.Top, new Coordinate(sPos.x + sDims.w / 2 - aSize, sPos.y - aSize)),
+            new Anchor(Anchors.Right, new Coordinate(sPos.x + sDims.w - aSize, sPos.y + sDims.h / 2 - aSize)),
+            new Anchor(Anchors.Bottom, new Coordinate(sPos.x + sDims.w / 2 - aSize, sPos.y + sDims.h - aSize)),
+            new Anchor(Anchors.Left, new Coordinate(sPos.x - aSize, sPos.y + sDims.h / 2 - aSize)),
+            new Anchor(Anchors.TopLeft, new Coordinate(sPos.x - aSize, sPos.y - aSize)),
+            new Anchor(Anchors.TopRight, new Coordinate(sPos.x + sDims.w - aSize, sPos.y - aSize)),
+            new Anchor(Anchors.BottomLeft, new Coordinate(sPos.x - aSize, sPos.y + sDims.h - aSize)),
+            new Anchor(Anchors.BottomRight, new Coordinate(sPos.x + sDims.w - aSize, sPos.y + sDims.h - aSize))
         ];
     }
 

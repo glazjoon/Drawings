@@ -14,7 +14,8 @@ export class ElementComponent {
 
     constructor(private editorService: EditorService) {}
 
-    clicked() {
+    /*clicked() {
         this.editorService.setSelected(this.element.id);
     }
+    */
 }
