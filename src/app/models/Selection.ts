@@ -19,6 +19,7 @@ export class Selection implements Drawable {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        this.update();
         ctx.save();
 
         ctx.strokeStyle = 'lightgray';

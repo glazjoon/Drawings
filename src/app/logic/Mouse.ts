@@ -3,6 +3,7 @@ import { Anchors } from './../enums/Anchors';
 
 export class Mouse {
     private canvas: HTMLCanvasElement;
+    mouseDragStart: Coordinate;
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;

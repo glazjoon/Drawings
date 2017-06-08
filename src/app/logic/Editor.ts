@@ -15,7 +15,6 @@ export class Editor {
     private isFreeResize: boolean;
     private isFixedResize: boolean;
     private isDrag: boolean;
-    private mouseDragStart: Coordinate;
     private shiftKeyDown: boolean;
 
     private mouse: Mouse;
@@ -89,7 +88,7 @@ export class Editor {
             this.mouse.setCursor('move');
         }
 
-        this.mouseDragStart = new Coordinate(mousePos.x, mousePos.y);
+        this.mouse.mouseDragStart = new Coordinate(mousePos.x, mousePos.y);
         this.resizeAnchor = this.selection ? this.selection.getHoveredAnchor(mousePos) : -1;
 
         if (this.resizeAnchor > -1) {
@@ -119,15 +118,15 @@ export class Editor {
         const mousePos = this.mouse.getCanvasMousePosition(event.clientX, event.clientY);
 
         if (this.isFreeResize) {
-            this.selection.element.resize(new ResizeOptions(this.resizeAnchor, mousePos, this.mouseDragStart, false));
+            this.selection.element.resize(new ResizeOptions(this.resizeAnchor, mousePos, this.mouse.mouseDragStart, false));
         } else if (this.isFixedResize) {
-            this.selection.element.resize(new ResizeOptions(this.resizeAnchor, mousePos, this.mouseDragStart, true));
+            this.selection.element.resize(new ResizeOptions(this.resizeAnchor, mousePos, this.mouse.mouseDragStart, true));
         } else if (this.isDrag) {
-            this.selection.element.move(mousePos, this.mouseDragStart);
+            this.selection.element.move(mousePos, this.mouse.mouseDragStart);
         }
 
         if (this.isDrag || this.isFixedResize || this.isFreeResize) {
-            this.mouseDragStart = mousePos;
+            this.mouse.mouseDragStart = mousePos;
             this.refresh();
         }
 

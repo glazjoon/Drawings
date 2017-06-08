@@ -1,6 +1,7 @@
 import { Coordinate } from './Coordinate';
 import { ResizeOptions } from './ResizeOptions';
 import { Shape } from './Shape';
+import { Anchors } from './../enums/Anchors';
 
 export class Circle extends Shape {
 
@@ -21,6 +22,49 @@ export class Circle extends Shape {
     }
 
     resize(options: ResizeOptions) {
+        const resize = options.mousePosition.x - options.mouseDragStart.x;
+
+        if (this.dims.w + resize < 1) {
+            this.dims.w = 1;
+            this.dims.h = 1;
+        } else {
+            switch (options.anchor) {
+                case Anchors.Left:
+                    break;
+                case Anchors.Right:
+                    break;
+                case Anchors.Top:
+                    break;
+                case Anchors.Bottom:
+                    break;
+                case Anchors.TopLeft:
+                    this.dims.w -= resize / 2;
+                    this.dims.h -= resize / 2;
+                    this.pos.x += resize / 2;
+                    break;
+                case Anchors.TopRight:
+                    this.dims.w += resize / 2;
+                    this.dims.h += resize / 2;
+                    this.pos.x += resize / 2;
+                    this.pos.y -= resize / 2;
+                    break;
+                case Anchors.BottomLeft:
+                    this.dims.w -= resize / 2;
+                    this.dims.h -= resize / 2;
+                    this.pos.x += resize / 2;
+                    this.pos.y += resize / 2;
+                    break;
+                case Anchors.BottomRight:
+                    this.dims.w += resize / 2;
+                    this.dims.h += resize / 2;
+                    this.pos.x += resize / 2;
+                    this.pos.y += resize / 2;
+                    break;
+            }
+        }
+    }
+
+    fixedResize() {
 
     }
 
