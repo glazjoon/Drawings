@@ -67,7 +67,7 @@ export class Polygon extends Element {
         hovered = coords.x > minX && coords.x < maxX && coords.y > minY && coords.y < maxY;
         return hovered;
         */
-        return false
+        return false;
     }
 
     addPoint() {
