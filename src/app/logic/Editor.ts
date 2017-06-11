@@ -65,6 +65,7 @@ export class Editor {
 
     private setSelected(mousePos: Coordinate) {
         const selected = this.drawing.getElementAtPosition(mousePos);
+        console.log(selected);
         if (selected != null) {
             this.selection = new Selection(selected);
         } else {
@@ -83,6 +84,8 @@ export class Editor {
 
     private onMouseDown(event: MouseEvent) {
         const mousePos = this.mouse.getCanvasMousePosition(event.clientX, event.clientY);
+        console.log(mousePos);
+
 
         if (this.isDrag) {
             this.mouse.setCursor('move');

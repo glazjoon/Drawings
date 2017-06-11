@@ -15,11 +15,11 @@ export class Selection implements Drawable {
 
     constructor(selectedElement: Element) {
         this.element = selectedElement;
-        this.update();
+        //this.update();
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        this.update();
+        //this.update();
         ctx.save();
 
         ctx.strokeStyle = 'lightgray';

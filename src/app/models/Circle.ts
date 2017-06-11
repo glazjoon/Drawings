@@ -23,75 +23,82 @@ export class Circle extends Shape {
 
     resize(options: ResizeOptions) {
         let resize = (options.mousePosition.x - options.mouseDragStart.x) / 2;
-       /* const resizeX = (options.mousePosition.x - options.mouseDragStart.x) / 2;
-        const resizeY = (options.mouseDragStart.y - options.mousePosition.y) / 2;
+        const resizeX = (options.mousePosition.x - options.mouseDragStart.x) / 2;
+        const resizeY = (options.mousePosition.y - options.mouseDragStart.y) / 2;
 
         if (resizeX > resizeY) {
-            console.log('x: ' + resizeX);
             resize = resizeX;
         } else {
-            console.log('y: ' + resizeY);
             resize = resizeY;
-        }*/
+        }
 
 
         if (this.dims.w + resize < 1 || this.dims.h + resize < 1) {
+
             this.dims.w = 1;
             this.dims.h = 1;
+
         } else if (options.isFixed) {
-            this.fixedResize(resize);
+
+            this.fixedResize(options);
+
         } else {
+
             switch (options.anchor) {
                 case Anchors.Left:
-                    this.dims.w -= resize;
-                    this.dims.h -= resize;
-                    this.pos.x += resize;
+                    this.dims.w -= resizeX;
+                    this.dims.h -= resizeX;
+                    this.pos.x += resizeX;
                     break;
                 case Anchors.Right:
-                    this.dims.w += resize;
-                    this.dims.h += resize;
-                    this.pos.x += resize;
+                    this.dims.w += resizeX;
+                    this.dims.h += resizeX;
+                    this.pos.x += resizeX;
                     break;
                 case Anchors.Top:
-                    this.dims.w += resize;
-                    this.dims.h += resize;
-                    this.pos.y -= resize;
+                    this.dims.w -= resizeY;
+                    this.dims.h -= resizeY;
+                    this.pos.y += resizeY;
                     break;
                 case Anchors.Bottom:
-                    this.dims.w += resize;
-                    this.dims.h += resize;
-                    this.pos.y += resize;
+                    this.dims.w += resizeY;
+                    this.dims.h += resizeY;
+                    this.pos.y += resizeY;
                     break;
                 case Anchors.TopLeft:
-                    this.dims.w -= resize;
-                    this.dims.h -= resize;
-                    this.pos.x += resize;
-                    this.pos.y += resize;
+                    this.dims.w -= resizeX;
+                    this.dims.h -= resizeX;
+                    this.pos.x += resizeX;
+                    this.pos.y += resizeX;
                     break;
                 case Anchors.TopRight:
-                    this.dims.w += resize;
-                    this.dims.h += resize;
-                    this.pos.x += resize;
-                    this.pos.y -= resize;
+                    this.dims.w += resizeX;
+                    this.dims.h += resizeX;
+                    this.pos.x += resizeX;
+                    this.pos.y -= resizeX;
                     break;
                 case Anchors.BottomLeft:
-                    this.dims.w -= resize;
-                    this.dims.h -= resize;
-                    this.pos.x += resize;
-                    this.pos.y -= resize;
+                    this.dims.w -= resizeX;
+                    this.dims.h -= resizeX;
+                    this.pos.x += resizeX;
+                    this.pos.y -= resizeX;
                     break;
                 case Anchors.BottomRight:
-                    this.dims.w += resize;
-                    this.dims.h += resize;
-                    this.pos.x += resize;
-                    this.pos.y += resize;
+                    this.dims.w += resizeX;
+                    this.dims.h += resizeX;
+                    this.pos.x += resizeX;
+                    this.pos.y += resizeX;
                     break;
             }
+
         }
     }
 
-    fixedResize(resize: number) {
+    fixedResize(options: ResizeOptions) {
+        let resize = (options.mousePosition.x - options.mouseDragStart.x) / 2;
+
         this.dims.w += resize;
+        this.dims.h += resize;
     }
 
     isHovered(coords: Coordinate): boolean {

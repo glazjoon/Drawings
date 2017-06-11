@@ -1,3 +1,5 @@
+import { Polygon } from './../../models/Polygon';
+import { Stroke } from './../../models/Stroke';
 import { Drawing } from './../../models/Drawing';
 import { Circle } from './../../models/Circle';
 import { EditorService } from './../../services/editor.service';
@@ -34,6 +36,18 @@ export class EditorComponent implements OnInit {
             new ElementOptions(
                 new Coordinate(this.canvasWidth / 2 - 125, this.canvasHeight / 2 - 125),
                 new Dimensions(50, 50), '#ff0000', null)));
+
+        this.editor.addElement(new Polygon(
+            new ElementOptions(null, null, 'green', new Stroke('black', 5)),
+            [
+                new Coordinate(514, 136),
+                new Coordinate(554, 48),
+                new Coordinate(619, 152),
+                new Coordinate(611, 218),
+                new Coordinate(458, 158)
+            ]
+        ));
+
         /*
                 this.editor.addElement(new Text(
                     'Drawings',
