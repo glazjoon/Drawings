@@ -22,50 +22,76 @@ export class Circle extends Shape {
     }
 
     resize(options: ResizeOptions) {
-        const resize = options.mousePosition.x - options.mouseDragStart.x;
+        let resize = (options.mousePosition.x - options.mouseDragStart.x) / 2;
+       /* const resizeX = (options.mousePosition.x - options.mouseDragStart.x) / 2;
+        const resizeY = (options.mouseDragStart.y - options.mousePosition.y) / 2;
 
-        if (this.dims.w + resize < 1) {
+        if (resizeX > resizeY) {
+            console.log('x: ' + resizeX);
+            resize = resizeX;
+        } else {
+            console.log('y: ' + resizeY);
+            resize = resizeY;
+        }*/
+
+
+        if (this.dims.w + resize < 1 || this.dims.h + resize < 1) {
             this.dims.w = 1;
             this.dims.h = 1;
+        } else if (options.isFixed) {
+            this.fixedResize(resize);
         } else {
             switch (options.anchor) {
                 case Anchors.Left:
+                    this.dims.w -= resize;
+                    this.dims.h -= resize;
+                    this.pos.x += resize;
                     break;
                 case Anchors.Right:
+                    this.dims.w += resize;
+                    this.dims.h += resize;
+                    this.pos.x += resize;
                     break;
                 case Anchors.Top:
+                    this.dims.w += resize;
+                    this.dims.h += resize;
+                    this.pos.y -= resize;
                     break;
                 case Anchors.Bottom:
+                    this.dims.w += resize;
+                    this.dims.h += resize;
+                    this.pos.y += resize;
                     break;
                 case Anchors.TopLeft:
-                    this.dims.w -= resize / 2;
-                    this.dims.h -= resize / 2;
-                    this.pos.x += resize / 2;
+                    this.dims.w -= resize;
+                    this.dims.h -= resize;
+                    this.pos.x += resize;
+                    this.pos.y += resize;
                     break;
                 case Anchors.TopRight:
-                    this.dims.w += resize / 2;
-                    this.dims.h += resize / 2;
-                    this.pos.x += resize / 2;
-                    this.pos.y -= resize / 2;
+                    this.dims.w += resize;
+                    this.dims.h += resize;
+                    this.pos.x += resize;
+                    this.pos.y -= resize;
                     break;
                 case Anchors.BottomLeft:
-                    this.dims.w -= resize / 2;
-                    this.dims.h -= resize / 2;
-                    this.pos.x += resize / 2;
-                    this.pos.y += resize / 2;
+                    this.dims.w -= resize;
+                    this.dims.h -= resize;
+                    this.pos.x += resize;
+                    this.pos.y -= resize;
                     break;
                 case Anchors.BottomRight:
-                    this.dims.w += resize / 2;
-                    this.dims.h += resize / 2;
-                    this.pos.x += resize / 2;
-                    this.pos.y += resize / 2;
+                    this.dims.w += resize;
+                    this.dims.h += resize;
+                    this.pos.x += resize;
+                    this.pos.y += resize;
                     break;
             }
         }
     }
 
-    fixedResize() {
-
+    fixedResize(resize: number) {
+        this.dims.w += resize;
     }
 
     isHovered(coords: Coordinate): boolean {
